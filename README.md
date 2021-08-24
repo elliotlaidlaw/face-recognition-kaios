@@ -1,3 +1,5 @@
+# Face Recognition for KaiOS
+
 This project was bootstrapped with [Create KaiOS App](https://github.com/jzhangs/create-kaios-app).
 
 It's a pure javascript KaiOS app, but still uses kaios-scripts to build and pack the app. The build step will place the bundled scripts under 'src/' folder into the `<body>` tag.
