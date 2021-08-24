@@ -1,0 +1,30 @@
+{
+  "name": "Face Recognition",
+  "description": "Proof of concept for facial recognition on KaiOS",
+  "version": "0.0.1",
+  "developer": {
+    "name": "Fraser Barton / Elliot Laidlaw",
+    "url": "https://github.com/elliotlaidlaw"
+  },
+  "launch_path": "/index.html",
+    "icons": {
+    "56": "/icons/app_56.png",
+    "112": "/icons/app_112.png"
+  },
+  "theme_color": "#a065e6",
+  "type": "privileged",
+  "permissions": {
+    "systemXHR": {}
+  },
+  "chrome": {
+    "statusbar": "overlap"
+  },
+  "orientation": "default",
+  "locales": {
+    "en-US": {
+      "name": "Template",
+      "description": "Template App for KaiOS"
+    }
+  },
+  "default_locale": "en-US"
+}

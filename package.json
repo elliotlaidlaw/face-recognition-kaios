@@ -1,0 +1,26 @@
+{
+  "name": "vladmandic",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@tensorflow/tfjs": "^3.8.0",
+    "@vladmandic/face-api": "^1.4.1",
+    "kaios-scripts": "0.0.9"
+  },
+  "scripts": {
+    "start": "kaios-scripts start",
+    "build": "kaios-scripts build",
+    "push": "kaios-scripts push",
+    "test": "kaios-scripts test",
+    "eject": "kaios-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}
