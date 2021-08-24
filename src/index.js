@@ -1,4 +1,3 @@
-// import l10n.js first
 import 'kaios-gaia-l10n';
 import './index.css';
 
@@ -24,6 +23,7 @@ function start() {
 
 function enrol() {
 
+  document.getElementById('header').innerHTML = "Enrol"
   const imageEnrol = document.getElementById('imageUpload');
   console.log('Ready')
 
@@ -55,6 +55,7 @@ function enrol() {
 
 function authenticate() {
 
+  document.getElementById('header').innerHTML = "Authenticate"
   const imageUpload = document.getElementById('imageUpload');
   const expressionArray = ['neutral', 'happy', 'sad', 'angry', 'surprised'];
 
