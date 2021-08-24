@@ -74,8 +74,7 @@ function authenticate() {
   const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.4)
 
   console.log('Loaded')
-  // rand = Math.floor(Math.random() * 5)
-  var rand = 4
+  var rand = Math.floor(Math.random() * 5)
   console.log("Please upload an image with the following emotion: "+ expressionArray[rand])
 
   imageUpload.addEventListener('change', () => {
