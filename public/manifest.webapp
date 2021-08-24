@@ -10,7 +10,7 @@
     "icons": {
     "56": "/icons/app_56.png",
     "112": "/icons/app_112.png",
-    "128": "/icons/app_112.png"
+    "128": "/icons/app_128.png"
   },
   "theme_color": "#a065e6",
   "type": "privileged",
