@@ -1,5 +1,12 @@
+// import l10n.js first
 import 'kaios-gaia-l10n';
 import './index.css';
+
+const imageUpload = document.getElementById('imageUpload');
+const header = document.getElementById('header');
+const instructor = document.getElementById('instructor');
+
+instructor.innerHTML = "Loading";
 
 const tf = require('@tensorflow/tfjs')
 tf.setBackend('cpu')
@@ -23,31 +30,36 @@ function start() {
 
 function enrol() {
 
-  document.getElementById('header').innerHTML = "Enrol"
-  const imageEnrol = document.getElementById('imageUpload');
+  header.innerHTML = "Enrol";
   console.log('Ready')
+  instructor.innerHTML = "Ready";
 
-  imageEnrol.addEventListener('change', () => {
+  imageUpload.addEventListener('change', () => {
 
-    var image = faceapi.bufferToImage(imageEnrol.files[0])
+    instructor.innerHTML = "Working";
+
+    var image = faceapi.bufferToImage(imageUpload.files[0])
     
     image.then((img) => {
 
       console.log('Image loaded')
 
-      var detection = faceapi.detectSingleFace(img, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks(true).withFaceDescriptor()
+      var detection = faceapi.detectSingleFace(img, new faceapi.TinyFaceDetectorOptions())
+      .withFaceLandmarks(true).withFaceDescriptor()
 
       detection.then((dtn) => {
 
-        console.log("Detection loaded")
-        console.log(dtn.descriptor)
+        //console.log("Detection loaded")
+        //console.log(dtn.descriptor)
 
         var data = JSON.stringify(dtn.descriptor)
         console.log('saving...')
         var myStorage = window.localStorage
         myStorage.setItem('descriptor', data)
-        window.location.reload()
 
+        instructor.innerHTML = "Done";
+
+        window.location.reload()
       });
     });
   })
@@ -55,11 +67,8 @@ function enrol() {
 
 function authenticate() {
 
-  document.getElementById('header').innerHTML = "Authenticate"
-  const imageUpload = document.getElementById('imageUpload');
-  const expressionArray = ['neutral', 'happy', 'sad', 'angry', 'surprised'];
+  header.innerHTML = "Authenticate";
 
-  console.log('loading...')
   var myStorage = window.localStorage
   var result = myStorage.getItem('descriptor')
   var descriptions = []
@@ -74,42 +83,57 @@ function authenticate() {
   var labeledFaceDescriptors =  new faceapi.LabeledFaceDescriptors('john', descriptions)
   const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.4)
 
-  console.log('Loaded')
-  var rand = Math.floor(Math.random() * 5)
-  console.log("Please upload an image with the following emotion: "+ expressionArray[rand])
+  var reqExpression = randExpression()
+  console.log('Loaded');
 
   imageUpload.addEventListener('change', () => {
+
+    instructor.innerHTML = "Working";
     var image = faceapi.bufferToImage(imageUpload.files[0])
     
     image.then((img) => {
 
-      const detection = faceapi.detectSingleFace(img, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks(true).withFaceExpressions().withFaceDescriptor()
+      const detection = faceapi.detectSingleFace(img, new faceapi.TinyFaceDetectorOptions())
+      .withFaceLandmarks(true).withFaceExpressions().withFaceDescriptor()
 
       detection.then((dtn) => {
 
         const minConfidence = 0.4
         var sorted = dtn.expressions.asSortedArray()
+
         console.log(sorted[0].expression)
-        if (sorted[0].probability >= minConfidence && sorted[0].expression === expressionArray[rand])
+
+        if (sorted[0].probability >= minConfidence && sorted[0].expression === reqExpression)
         {
           const result = faceMatcher.findBestMatch(dtn.descriptor)
           const distance = result['distance']
           if (distance <= 0.4) 
           {
-            alert('You are John')
+            alert('User Verified')
           } 
           else
           {
-            alert('you are not John. \ntry again.')
+            alert('Verification failed. \nTry again.')
+            reqExpression = randExpression()
           }
         }
         else 
         {
-          alert("Liveness Test Failed")
+          alert('Liveness Test Failed. \nTry again')
+          reqExpression = randExpression()
         }
       });
     });
   })
+}
+
+function randExpression() {
+
+  const expressionArray = ['neutral', 'happy', 'sad', 'angry', 'surprised'];
+  var rand = Math.floor(Math.random() * 5)
+  var reqExpression = expressionArray[rand]
+  instructor.innerHTML = "Please upload an image with the following emotion: " + reqExpression;
+  return reqExpression
 }
 
 function useCamera() {
