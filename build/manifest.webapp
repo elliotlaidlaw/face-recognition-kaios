@@ -1,30 +1,33 @@
 {
-  "name": "Face Recognition",
-  "description": "Proof of concept for facial recognition on KaiOS",
-  "version": "0.0.1",
+  "name": "KaiFace",
+  "description": "Biometric Face identification and verification for KaiOS",
+  "version": "1.0",
   "developer": {
-    "name": "Fraser Barton / Elliot Laidlaw",
-    "url": "https://github.com/elliotlaidlaw"
+    "name": "Elliot Laidlaw, Fraser Barton",
+    "url": "https://github.com/elliotlaidlaw/face-recognition-kaios/"
   },
   "launch_path": "/index.html",
     "icons": {
     "56": "/icons/app_56.png",
-    "112": "/icons/app_112.png"
+    "112": "/icons/app_112.png",
+    "128": "/icons/app_128.png"
   },
   "theme_color": "#a065e6",
   "type": "privileged",
   "permissions": {
-    "systemXHR": {}
+    "systemXHR": {},
+    "camera": {
+      "description": "Required for capturing user's face for recognition"
+    },
+    "device-storage:pictures": {
+      "description": "Required for obtaining image of user's face for recognition",
+      "access": "readwrite"
+    },
+    "spatialnavgigation-app-manage": {}
   },
   "chrome": {
     "statusbar": "overlap"
   },
-  "orientation": "default",
-  "locales": {
-    "en-US": {
-      "name": "Template",
-      "description": "Template App for KaiOS"
-    }
-  },
-  "default_locale": "en-US"
+  "orientation": [ "portrait-primary" ],
+  "default_locale": "en-GB"
 }

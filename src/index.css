@@ -6,9 +6,97 @@ html {
 body {
   margin: 0;
   padding: 0;
+  /* background-color: rgb(177, 177, 177); */
+  /* border-style: solid;
+  border-width: 2px;
+  border-color: rgb(234, 0, 255); */
+  background-color: rgb(221, 221, 221);
 }
 
 div {
+  text-align: center;
+}
+
+#topbar {
+  background-color: black;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 25px;
+}
+
+/* #videocontainer {
+  width: 80vh;
+  height: 72vh;
+  transform: rotate(270deg);
+  display: block;
+  margin: 0 auto;
+  background-color: blueviolet;
+  z-index: -1;
+  box-sizing: border-box;
+  border-style: solid;
+  border-width: 4px;
+  border-color: rgb(234, 0, 255);
+} */
+
+#preview {
+  width: 74vh;
+  height: 76vh;
+  transform: rotate(270deg);
+  display: block;
+  margin: 30px auto 0 auto;
+  /* background-color: blueviolet; */
+  z-index: -2;
+  /* box-sizing: border-box;
+  border-style: solid;
+  border-width: 4px;
+  border-color: rgb(234, 0, 255); */
+}
+
+#showimage {
+  width: 76vh;
+  height: 74vh;
+  display: block;
+  margin: 30px auto 0 auto;
+  /* background-color: blueviolet; */
+  z-index: -1;
+}
+
+#header {
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 25px;
+  left: 0;
+  text-align: center;
+  width: 100%;
+  height: fit-content;
+  background-color: rgb(221, 221, 221);
+}
+
+#headertext {
+  margin: 0;
+  padding: 2px 0;
+  text-align: center;
+  font-size: 24px;
+}
+
+#instructor {
+  padding: 2px 0;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  text-align: center;
+  width: 100%;
+  height: fit-content;
+  font-size: 20px;
+  background-color: rgb(221, 221, 221);
+}
+
+#instructortext {
+  margin: 0;
+  padding: 0;
   text-align: center;
 }
 
@@ -36,8 +124,4 @@ div {
   color: purple;
   width: calc(100% - 2rem);
   line-height: 2.8rem;
-}
-
-p {
-  padding: 0 1rem;
 }

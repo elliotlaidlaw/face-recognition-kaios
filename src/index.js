@@ -2,15 +2,43 @@
 import 'kaios-gaia-l10n';
 import './index.css';
 
-const imageUpload = document.getElementById('imageUpload');
-const header = document.getElementById('header');
-const instructor = document.getElementById('instructor');
+const picture = document.getElementById('picture');
+const header = document.getElementById('headertext');
+const instructor = document.getElementById('instructortext');
 
 instructor.innerHTML = "Loading";
 
 const tf = require('@tensorflow/tfjs')
 tf.setBackend('cpu')
 const faceapi = require('@vladmandic/face-api/dist/face-api.node-cpu.js')
+
+var image = null
+var cameraControl = null
+var display = document.getElementsByTagName('video')[0]
+var camera = window.navigator.mozCameras.getListOfCameras()[1]
+var options = {}
+var pictureOptions = {
+  pictureSize: null,
+  fileFormat: null
+}
+
+function onError(error) {
+  console.warn(error);
+}
+
+function showPreview() {
+  if (cameraControl != null) {
+    cameraControl.release()
+  }
+
+  function onPrevSuccess(cameraObj) {
+    cameraControl = cameraObj.camera
+    display.mozSrcObject = cameraControl
+    display.play()
+  }
+  
+  navigator.mozCameras.getCamera(camera, options).then(onPrevSuccess, onError);
+}
 
 Promise.all([
   faceapi.nets.faceRecognitionNet.loadFromUri('./models'),
@@ -32,43 +60,65 @@ function enrol() {
 
   header.innerHTML = "Enrol";
   console.log('Ready')
-  instructor.innerHTML = "Ready";
 
-  imageUpload.addEventListener('change', () => {
+  showPreview()
+  instructor.innerHTML = "Take Picture";
 
-    instructor.innerHTML = "Working";
+  picture.addEventListener('click', () => {
 
-    var image = faceapi.bufferToImage(imageUpload.files[0])
-    
-    image.then((img) => {
+    instructor.innerHTML = "Hold";
 
+    function onPictureTaken(blob) {
+      instructor.innerHTML = "Working";
+      console.log(blob)
+      var blobURL = URL.createObjectURL(blob)
+      var newImage = new Image()
+      newImage.src = blobURL
+      image = newImage
+      // document.body.style.backgroundImage = "url('" + blobURL + "')"
+  
       console.log('Image loaded')
-
-      var detection = faceapi.detectSingleFace(img, new faceapi.TinyFaceDetectorOptions())
+      console.log(image)
+  
+      var detection = faceapi.detectSingleFace(image, new faceapi.TinyFaceDetectorOptions())
       .withFaceLandmarks(true).withFaceDescriptor()
-
+  
       detection.then((dtn) => {
 
-        //console.log("Detection loaded")
-        //console.log(dtn.descriptor)
+        console.log(dtn.descriptor)
 
         var data = JSON.stringify(dtn.descriptor)
         console.log('saving...')
         var myStorage = window.localStorage
         myStorage.setItem('descriptor', data)
-
+  
         instructor.innerHTML = "Done";
-
+  
         window.location.reload()
       });
-    });
+    }
+
+    function onPictureNotTaken(error) {
+      instructor.innerHTML = "Camera Error";
+    }
+  
+    function onPicSuccess(cameraObj) {
+      cameraControl = cameraObj.camera
+      pictureOptions.pictureSize = cameraControl.capabilities.pictureSizes[0]
+      pictureOptions.fileformat  = cameraControl.capabilities.fileFormats[0]
+  
+      cameraControl.takePicture(pictureOptions).then(onPictureTaken, onPictureNotTaken)
+    }
+
+    cameraControl.release()
+    navigator.mozCameras.getCamera(camera, options).then(onPicSuccess, onError);
   })
 }
 
 function authenticate() {
 
   header.innerHTML = "Authenticate";
-
+  
   var myStorage = window.localStorage
   var result = myStorage.getItem('descriptor')
   var descriptions = []
@@ -84,20 +134,32 @@ function authenticate() {
   const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.4)
 
   var reqExpression = randExpression()
-  console.log('Loaded');
+  console.log('Loaded')
 
-  imageUpload.addEventListener('change', () => {
+  showPreview()
+  // instructor.innerHTML = "Take Picture";
 
-    instructor.innerHTML = "Working";
-    var image = faceapi.bufferToImage(imageUpload.files[0])
-    
-    image.then((img) => {
+  picture.addEventListener('click', () => {
 
-      const detection = faceapi.detectSingleFace(img, new faceapi.TinyFaceDetectorOptions())
+    instructor.innerHTML = "Hold";
+
+    function onPictureTaken(blob) {
+      instructor.innerHTML = "Working";
+      var blobURL = URL.createObjectURL(blob)
+      var newImage = new Image()
+      newImage.src = blobURL
+      image = newImage
+      // document.body.style.backgroundImage = "url('" + blobURL + "')"
+  
+      console.log('Image loaded')
+      console.log(image)
+  
+      var detection = faceapi.detectSingleFace(image, new faceapi.TinyFaceDetectorOptions())
       .withFaceLandmarks(true).withFaceExpressions().withFaceDescriptor()
 
       detection.then((dtn) => {
 
+        console.log(dtn.descriptor)
         const minConfidence = 0.4
         var sorted = dtn.expressions.asSortedArray()
 
@@ -123,53 +185,29 @@ function authenticate() {
           reqExpression = randExpression()
         }
       });
-    });
+    }
+
+    function onPictureNotTaken(error) {
+      instructor.innerHTML = "Camera Error";
+    }
+  
+    function onPicSuccess(cameraObj) {
+      cameraControl = cameraObj.camera
+      pictureOptions.pictureSize = cameraControl.capabilities.pictureSizes[0]
+      pictureOptions.fileformat  = cameraControl.capabilities.fileFormats[0]
+  
+      cameraControl.takePicture(pictureOptions).then(onPictureTaken, onPictureNotTaken)
+    }
+
+    cameraControl.release()
+    navigator.mozCameras.getCamera(camera, options).then(onPicSuccess, onError);
   })
 }
 
 function randExpression() {
-
   const expressionArray = ['neutral', 'happy', 'sad', 'angry', 'surprised'];
   var rand = Math.floor(Math.random() * 5)
   var reqExpression = expressionArray[rand]
-  instructor.innerHTML = "Please upload an image with the following emotion: " + reqExpression;
+  instructor.innerHTML = "Show " + reqExpression + " expression";
   return reqExpression
-}
-
-function useCamera() {
-  var options = {}
-  var pictureOptions = {
-    pictureSize: null,
-    fileFormat: null
-  }
-  
-  var camera = navigator.mozCameras.getListOfCameras()[1]
-
-  function onPictureTaken(blob) {
-    console.log(blob)
-    var blobURL = URL.createObjectURL(blob)
-    var image = new Image()
-    image.src = blobURL
-    console.log(image)
-    document.body.style.backgroundImage = "url('" + blobURL + "')"
-  }
-
-  function onPictureNotTaken(error) {
-    console.warn(error)
-  }
-  
-  function onSuccess(cameraObj) {
-    var cameraControl = cameraObj.camera
-    pictureOptions.pictureSize = cameraControl.capabilities.pictureSizes[0]
-    pictureOptions.fileformat  = cameraControl.capabilities.fileFormats[0]
-  
-    console.log(cameraControl)
-    cameraControl.takePicture(pictureOptions).then(onPictureTaken, onPictureNotTaken)
-  }
-  
-  function onError(error) {
-    console.warn(error);
-  }
-  
-  navigator.mozCameras.getCamera(camera, options).then(onSuccess, onError);
 }
