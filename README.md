@@ -22,7 +22,7 @@ Then, in the directory of the app, you run:
 npm install @tensorflow/tfjs
 npm install @vladmandic/face-api
 ```
-which installs the necessary libraries in the `node_modules` folder.
+which installs the remaining necessary libraries in the `node_modules` folder.
 
 ## Available Scripts
 
