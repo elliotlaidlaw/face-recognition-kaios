@@ -12,8 +12,8 @@ It's a pure javascript KaiOS app, but still uses kaios-scripts to build and pack
 
 In the directory of the app, you run:
 ```
-	 npm install @tensorflow/tfjs
-	 npm install @vladmandic/face-api
+npm install @tensorflow/tfjs
+npm install @vladmandic/face-api
 ```
 which installs the necessary libraries in a `node_modules` folder.
 
