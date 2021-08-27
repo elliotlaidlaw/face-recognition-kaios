@@ -17,7 +17,7 @@ yarn create kaios-app newapp
 ```
 and extract the `node_modules` folder, placing it into the directory of this app.
 
-In the directory of the app, you run:
+Then, in the directory of the app, you run:
 ```
 npm install @tensorflow/tfjs
 npm install @vladmandic/face-api
