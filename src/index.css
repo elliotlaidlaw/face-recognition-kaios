@@ -43,7 +43,8 @@ div {
 #preview {
   width: 74vh;
   height: 76vh;
-  transform: rotate(270deg);
+  transform: scaleX(-1) rotate(270deg);
+  /* transform: ; */
   display: block;
   margin: 30px auto 0 auto;
   /* background-color: blueviolet; */

@@ -75,27 +75,40 @@ function enrol() {
       var newImage = new Image()
       newImage.src = blobURL
       image = newImage
-      // document.body.style.backgroundImage = "url('" + blobURL + "')"
   
       console.log('Image loaded')
       console.log(image)
   
-      var detection = faceapi.detectSingleFace(image, new faceapi.TinyFaceDetectorOptions())
-      .withFaceLandmarks(true).withFaceDescriptor()
-  
-      detection.then((dtn) => {
+      try {
+        setTimeout(function () {
+          alert('Detection timeout.\nTry again.')
+          instructor.innerHTML = "Take Picture"
+          showPreview()
+          // throw console.log("timeout")
+        }, 90000)
 
-        console.log(dtn.descriptor)
+        var detection = faceapi.detectSingleFace(image, new faceapi.TinyFaceDetectorOptions())
+        .withFaceLandmarks(true).withFaceDescriptor()
+    
+        detection.then((dtn) => {
 
-        var data = JSON.stringify(dtn.descriptor)
-        console.log('saving...')
-        var myStorage = window.localStorage
-        myStorage.setItem('descriptor', data)
-  
-        instructor.innerHTML = "Done";
-  
-        window.location.reload()
-      });
+          console.log(dtn.descriptor)
+
+          var data = JSON.stringify(dtn.descriptor)
+          console.log('saving...')
+          var myStorage = window.localStorage
+          setLatestDescriptor(myStorage, data)
+          myStorage.setItem('descriptor', data)
+    
+          instructor.innerHTML = "Done";
+    
+          window.location.reload()
+        });
+      } catch {
+        alert('Face not detected.\nTry again.')
+        instructor.innerHTML = "Take Picture"
+        showPreview()
+      }
     }
 
     function onPictureNotTaken(error) {
@@ -133,6 +146,24 @@ function authenticate() {
   var labeledFaceDescriptors =  new faceapi.LabeledFaceDescriptors('john', descriptions)
   const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.4)
 
+  var labeledLatestDescriptors = []
+  var latest = getLatestDescriptors(myStorage)
+  console.log(latest)
+  latest.forEach(element => {
+    console.log(element)
+    descriptions = []
+    descriptorArray = JSON.parse(element)
+    for (let x in descriptorArray) {
+      descriptions.push(descriptorArray[x])
+    }
+    floatArray = Float32Array.from(descriptions)
+    descriptions = []
+    descriptions.push(floatArray)
+    console.log(descriptions)
+    labeledLatestDescriptors.push(new faceapi.LabeledFaceDescriptors('', descriptions))
+  })
+  const latestFaceMatcher = new faceapi.FaceMatcher(labeledLatestDescriptors, 0.1)
+
   var reqExpression = randExpression()
   console.log('Loaded')
 
@@ -149,42 +180,59 @@ function authenticate() {
       var newImage = new Image()
       newImage.src = blobURL
       image = newImage
-      // document.body.style.backgroundImage = "url('" + blobURL + "')"
   
       console.log('Image loaded')
       console.log(image)
   
-      var detection = faceapi.detectSingleFace(image, new faceapi.TinyFaceDetectorOptions())
-      .withFaceLandmarks(true).withFaceExpressions().withFaceDescriptor()
+      try{
+        setTimeout(function () {
+          alert('Detection timeout.\nTry again.')
+          window.location.reload()
+        }, 90000)
 
-      detection.then((dtn) => {
+        var detection = faceapi.detectSingleFace(image, new faceapi.TinyFaceDetectorOptions())
+        .withFaceLandmarks(true).withFaceExpressions().withFaceDescriptor()
 
-        console.log(dtn.descriptor)
-        const minConfidence = 0.4
-        var sorted = dtn.expressions.asSortedArray()
+        detection.then((dtn) => {
 
-        console.log(sorted[0].expression)
+          console.log(dtn.descriptor)
+          const minConfidence = 0.4
+          var sorted = dtn.expressions.asSortedArray()
 
-        if (sorted[0].probability >= minConfidence && sorted[0].expression === reqExpression)
-        {
-          const result = faceMatcher.findBestMatch(dtn.descriptor)
-          const distance = result['distance']
-          if (distance <= 0.4) 
+          console.log(sorted[0].expression)
+
+          if (sorted[0].probability >= minConfidence && sorted[0].expression === reqExpression)
           {
-            alert('User Verified')
-          } 
-          else
-          {
-            alert('Verification failed. \nTry again.')
-            reqExpression = randExpression()
+            const result = faceMatcher.findBestMatch(dtn.descriptor)
+            const distance = result['distance']
+
+            const latestResult = latestFaceMatcher.findBestMatch(dtn.descriptor)
+            const lastestDistance = latestResult['distance']
+            if (distance <= 0.4 && distance >= 0.1 && lastestDistance >= 0.1)
+            {
+              alert('User Verified')
+              var data = JSON.stringify(dtn.descriptor)
+              setLatestDescriptor(myStorage, data)
+            } 
+            else
+            {
+              alert('Verification failed. \nTry again.')
+              reqExpression = randExpression()
+              window.location.reload()
+            }
           }
-        }
-        else 
-        {
-          alert('Liveness Test Failed. \nTry again')
-          reqExpression = randExpression()
-        }
-      });
+          else 
+          {
+            alert('Liveness Test Failed. \nTry again')
+            reqExpression = randExpression()
+            window.location.reload()
+          }
+        });
+      } catch {
+        alert('Face not detected.\nTry again.')
+        instructor.innerHTML = "Take Picture"
+        showPreview()
+      }
     }
 
     function onPictureNotTaken(error) {
@@ -210,4 +258,30 @@ function randExpression() {
   var reqExpression = expressionArray[rand]
   instructor.innerHTML = "Show " + reqExpression + " expression";
   return reqExpression
+}
+
+function getLatestDescriptors(myStorage) {
+  var latest = []
+
+  if (myStorage.getItem('saved1') != null) {
+    latest.push(myStorage.getItem('saved1'))
+  } else if (myStorage.getItem('saved2') != null) {
+    latest.push(myStorage.getItem('saved2'))
+  } else if (myStorage.getItem('saved3') != null) {
+    latest.push(myStorage.getItem('saved3'))
+  } else if (myStorage.getItem('saved4') != null) {
+    latest.push(myStorage.getItem('saved4'))
+  } else if (myStorage.getItem('saved5') != null) {
+    latest.push(myStorage.getItem('saved5'))
+  }
+  
+  return latest
+}
+
+function setLatestDescriptor(myStorage, descriptor) {
+  myStorage.setItem('saved5', myStorage.getItem('saved4'))
+  myStorage.setItem('saved4', myStorage.getItem('saved3'))
+  myStorage.setItem('saved3', myStorage.getItem('saved2'))
+  myStorage.setItem('saved2', myStorage.getItem('saved1'))
+  myStorage.setItem('saved1', descriptor)
 }
