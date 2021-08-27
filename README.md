@@ -10,6 +10,13 @@ It's a pure javascript KaiOS app, but still uses kaios-scripts to build and pack
 
 **You’ll need to have Node 8.10.0 or later on your local development machine**. You can use [nvm](https://github.com/creationix/nvm#installation) (macOS/Linux) to easily switch Node versions between different projects.
 
+Since the `node_modules` folder is too large to upload to Github, you will first need to create a new app using:
+
+```
+yarn create kaios-app newapp
+```
+and extract the `node_modules` folder, placing it into the directory of this app.
+
 In the directory of the app, you run:
 ```
 npm install @tensorflow/tfjs
