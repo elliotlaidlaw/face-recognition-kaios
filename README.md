@@ -31,7 +31,7 @@ The page will reload if you make edits. You will also see any lint errors in the
 
 ### `yarn build`
 
-Builds the app for production to the `build` folder. The build is minified and the filenames include the hashes. Now the `build` folder is ready to be run in the simulator or installed on the device.
+Builds the app for production to the `build` folder. The build is minified and the filenames include the hashes. Now the `build` folder is ready to be installed on the device.
 
 ### `yarn push`
 
