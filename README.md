@@ -7,7 +7,7 @@ This project was bootstrapped with [Create KaiOS App](https://github.com/jzhangs
 It's a pure javascript KaiOS app, but still uses kaios-scripts to build and pack the app. The build step will place the bundled scripts under 'src/' folder into the `<body>` tag.
 
 ![](./docs/demo-screenshot-open.png)
-![](./docs/demo-screenshot-enrol.png)
+![](./docs/demo-screenshot-enroll.png)
 ![](./docs/demo-screenshot-auth.png)
 ![](./docs/demo-screenshot-verified.png)
 
