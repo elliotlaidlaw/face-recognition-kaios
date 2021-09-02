@@ -1,15 +1,16 @@
 # Face Recognition for KaiOS
 
+![](./docs/demo-screenshot-open.png)
+![](./docs/demo-screenshot-enroll.png)
+![](./docs/demo-screenshot-auth.png)
+![](./docs/demo-screenshot-verified.png)
+
+
 Facial verification proof of concept app for KaiOS 2.5 devices, installed with the [2.5 simulator](https://developer.kaiostech.com/docs/getting-started/env-setup/simulator).
 
 This project was bootstrapped with [Create KaiOS App](https://github.com/jzhangs/create-kaios-app).
 
 It's a pure javascript KaiOS app, but still uses kaios-scripts to build and pack the app. The build step will place the bundled scripts under 'src/' folder into the `<body>` tag.
-
-![](./docs/demo-screenshot-open.png)
-![](./docs/demo-screenshot-enroll.png)
-![](./docs/demo-screenshot-auth.png)
-![](./docs/demo-screenshot-verified.png)
 
 ## Installation
 
