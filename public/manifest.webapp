@@ -12,6 +12,7 @@
     "112": "/icons/app_112.png",
     "128": "/icons/app_128.png"
   },
+  "categories": ["utilities"],
   "theme_color": "#a065e6",
   "type": "privileged",
   "permissions": {
@@ -19,12 +20,9 @@
     "camera": {
       "description": "Required for capturing user's face for recognition"
     },
-    "device-storage:pictures": {
-      "description": "Required for obtaining image of user's face for recognition",
-      "access": "readwrite"
-    },
     "spatialnavgigation-app-manage": {}
   },
+  "fullscreen": "true",
   "chrome": {
     "statusbar": "overlap"
   },

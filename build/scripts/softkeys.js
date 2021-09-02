@@ -1,7 +1,7 @@
 const softkeyCallback = {
     left: function() {console.log("LEFT")},
     right: function() {console.log("RIGHT")},
-    center: function() {imageUpload.click()}
+    center: function() {picture.click()}
 };
 
 function handleKeyDown(evt)
