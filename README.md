@@ -6,7 +6,7 @@
 ![](./docs/demo-screenshot-verified.png)
 
 
-Facial verification proof of concept app for KaiOS 2.5 devices, installed with the [2.5 simulator](https://developer.kaiostech.com/docs/getting-started/env-setup/simulator). Uses Vladmantic's [face-api for face](https://github.com/vladmandic/face-api) recognition within the app.
+Facial verification proof of concept app for KaiOS 2.5 devices, installed with the [2.5 simulator](https://developer.kaiostech.com/docs/getting-started/env-setup/simulator). Uses [Vladmantic's face-api](https://github.com/vladmandic/face-api) for face recognition within the app.
 
 This project was bootstrapped with [Create KaiOS App](https://github.com/jzhangs/create-kaios-app).
 
